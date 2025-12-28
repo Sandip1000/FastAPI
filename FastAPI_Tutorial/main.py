@@ -11,7 +11,7 @@ from typing import Annotated, Literal, Optional
 # Using Pydantic for Data Validation and Type Validation
 class Patient(BaseModel):
 
-    id : Annotated[str, Field(..., description = "ID of the patient", examples = ["P001", "P002"]) ]
+    id : Annotated[str, Field(..., description = "ID of the patient", examples = ["P001", "P002"])]
     name : Annotated[str, Field(..., description = "Name of the patient" )]
     city : Annotated[str, Field(..., description = "City where the patient is living")]
     age : Annotated[int, Field(..., gt = 0, lt = 120, description = "Age of the patient")]
