@@ -1,16 +1,10 @@
 import streamlit as st
 import requests
 
-
-
-API_URL  = 'http://127.0.0.1:8000/predict'
+API_URL = "http://localhost:8000/predict" 
 
 st.title("Insurance Premium Category Predictor")
-
-st.markdown("Enter your details below: ")
-
-
-
+st.markdown("Enter your details below:")
 
 # Input fields
 age = st.number_input("Age", min_value=1, max_value=119, value=30)
@@ -23,9 +17,6 @@ occupation = st.selectbox(
     "Occupation",
     ['retired', 'freelancer', 'student', 'government_job', 'business_owner', 'unemployed', 'private_job']
 )
-
-
-
 
 if st.button("Predict Premium Category"):
     input_data = {
@@ -40,12 +31,18 @@ if st.button("Predict Premium Category"):
 
     try:
         response = requests.post(API_URL, json=input_data)
+        result = response.json()
 
-        if response.status_code == 200:
-            result = response.json()
-            st.success(f"Predicted Insurance Premium Category: **{result['predicted_category']}**")
+        if response.status_code == 200 and "response" in result:
+            prediction = result["response"]
+            st.success(f"Predicted Insurance Premium Category: **{prediction['predicted_category']}**")
+            st.write("🔍 Confidence:", prediction["confidence"])
+            st.write("📊 Class Probabilities:")
+            st.json(prediction["class_probabilities"])
+
         else:
-            st.error(f"API Error: {response.status_code} - {response.text}")
-    
-    except:
-        st.error("Could not connect to the FastAPI server. Make sure it's running on port 8000.")
+            st.error(f"API Error: {response.status_code}")
+            st.write(result)
+
+    except requests.exceptions.ConnectionError:
+        st.error("❌ Could not connect to the FastAPI server. Make sure it's running.")
