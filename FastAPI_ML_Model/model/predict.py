@@ -3,7 +3,7 @@ import pandas as pd
 
 
 # Import The ML Model
-with open(fr"C:\Users\sanje\Desktop\FastAPI\FastAPI_ML_Model\model\model.pkl", "rb") as f:
+with open(fr"model/model.pkl", "rb") as f:
     model = pickle.load(f)
 
 # MLFlow
